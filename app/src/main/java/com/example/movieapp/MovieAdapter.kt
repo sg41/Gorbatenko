@@ -27,7 +27,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
                 // Pass the movie details to the Intent
                 intent.putExtra("posterUrl", clickedMovie.movie.posterUrl)
-                intent.putExtra("description", clickedMovie.movie.nameEn)
+                intent.putExtra("description", clickedMovie.description)
                 intent.putExtra("genre", clickedMovie.movie.genres[0].genre)
                 intent.putExtra("country", clickedMovie.movie.countries[0].country)
                 // Start the activity

@@ -3,6 +3,8 @@ package com.example.movieapp
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -106,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 */
     private fun fetchMovieDetailsForList(movies: List<Movie>, onDetailsFetched: (List<Movie>) -> Unit) {
         val iterator = movies.iterator()
+        val handler = Handler(Looper.getMainLooper())
 
         fun fetchNextMovieDetails() {
             if (iterator.hasNext()) {
@@ -116,8 +119,10 @@ class MainActivity : AppCompatActivity() {
                     // Update your Movie object with the details if needed
                     movie.description = movieDetails?.description ?: ""
 
-                    // Recursively fetch details for the next movie
-                    fetchNextMovieDetails()
+                    // Recursively fetch details for the next movie after a delay
+                    handler.postDelayed({
+                        fetchNextMovieDetails()
+                    }, 1000) // Delay of 1000 milliseconds (1 second)
                 }
             } else {
                 // All details fetched, invoke the callback with the updated list

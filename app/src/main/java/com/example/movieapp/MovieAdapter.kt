@@ -30,7 +30,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .error(movie.posterUrlPreview)
                 .into(holder.posterImageView)
 
-            holder.titleTextView.text = movie.nameOriginal
+            holder.titleTextView.text = movie.nameRu
             holder.yearTextView.text = movie.year
         }
         override fun getItemCount(): Int {

@@ -35,12 +35,11 @@ object RetrofitClient {
                 .header("X-API-KEY", API_KEY) // Add the X-API-KEY header with your API key
             requestBuilder.header("accept",     "application/json")
 
-            val originalHttpUrl: HttpUrl = originalRequest.url()
-            val url = originalHttpUrl.newBuilder()
-                .addQueryParameter("page", "1")
-                .build()
-
-            requestBuilder.url(url)
+//            val originalHttpUrl: HttpUrl = originalRequest.url()
+//            val url = originalHttpUrl.newBuilder()
+//                .addQueryParameter("page", "1")
+//                .build()
+//            requestBuilder.url(url)
 
             val modifiedRequest = requestBuilder.build()
 

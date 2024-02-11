@@ -22,18 +22,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          setContentView(R.layout.activity_main)
-
+        // Initialize RecyclerView and MovieAdapter
+        recyclerView = findViewById(R.id.MovieList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
         movieViewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
         // Check if movies are already stored in ViewModel
         if (movieViewModel.movies == null) {
             // If not, fetch movies and set them in ViewModel
-          // Initialize RecyclerView and MovieAdapter
-        recyclerView = findViewById(R.id.MovieList)
-        movieAdapter = MovieAdapter(getDummyMovies(), this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = movieAdapter
-
-            // Fetch popular movies and update RecyclerView
+            movieAdapter = MovieAdapter(getDummyMovies(), this)
             try {
                 getPopularMovies()
             } catch (e: Exception) {
@@ -43,11 +39,9 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             // If movies are already in ViewModel, update RecyclerView
-            recyclerView = findViewById(R.id.MovieList)
             movieAdapter = MovieAdapter(movieViewModel.movies!!, this)
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = movieAdapter
         }
+        recyclerView.adapter = movieAdapter
     }
     private fun getPopularMovies() {
         if(movieAdapter.moviesLoaded())
@@ -61,10 +55,10 @@ class MainActivity : AppCompatActivity() {
                         val movies = it.items.map { movieNoDescription ->
                             Movie(
                                 movie = movieNoDescription,
-                                description = "Description is to be loaded, please come back in 20 seconds..."
+                                description = "Description is been loaded, please come back in about 20 seconds..."
                                 )
                         }
-                        movieViewModel.movies = movies
+//                        movieViewModel.movies = movies
                         movieAdapter.updateMovies(movies)
                         fetchMovieDetailsForList(movies) { updatedMovies ->
                             movieViewModel.movies = updatedMovies

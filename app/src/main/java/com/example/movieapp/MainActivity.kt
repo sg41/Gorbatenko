@@ -46,15 +46,11 @@ class MainActivity : AppCompatActivity() {
                         val movies = it.items.map { movieNoDescription ->
                             Movie(
                                 movie = movieNoDescription,
-                                description = "" // provide a default or empty description
+                                description = "Description is to be loaded, please come back in 20 seconds..."
                                 )
                         }
                         movieAdapter.updateMovies(movies)
                         fetchMovieDetailsForList(movies) { updatedMovies ->
-                            // Handle the updated list of movies with details
-                            // For example, update your RecyclerView adapter with the new data
-                            // movieAdapter.updateMovies(updatedMovies)
-                            // ...
                             movieAdapter.updateMovies(updatedMovies)
                         }
                     } ?: showError("Movie response is null")
@@ -73,39 +69,7 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-    /*
-    private fun getMovieDetails(movieId: Int) {
-        val call = RetrofitClient.kinopoiskApiService.getMovieDetails(movieId)
-        call.enqueue(object : Callback<MovieDetails> {
-            override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
-                if (response.isSuccessful) {
-                    val movieDetails = response.body()
-                    movieDetails?.let {
-                        // Handle the detailed movie information, update UI, etc.
-                        // For example, you can display information in a new activity or fragment.
-                        // You can also store this detailed information in a ViewModel or any other data structure.
 
-                        // Example:
-                        // val intent = Intent(this@MainActivity, MovieDetailsActivity::class.java)
-                        // intent.putExtra("movieDetails", movieDetails)
-                        // startActivity(intent)
-
-                    } ?: showError("Movie details response is null")
-                } else {
-                    // Handle unsuccessful response
-                    val errorMessage = "Error: ${response.code()} ${response.message()}"
-                    showError(errorMessage)
-                }
-            }
-
-            override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
-                // Handle network errors
-                val errorMessage = "Network error: ${t.message}"
-                showError(errorMessage)
-            }
-        })
-    }
-*/
     private fun fetchMovieDetailsForList(movies: List<Movie>, onDetailsFetched: (List<Movie>) -> Unit) {
         val iterator = movies.iterator()
         val handler = Handler(Looper.getMainLooper())
@@ -117,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
                 getMovieDetails(movieId) { movieDetails ->
                     // Update your Movie object with the details if needed
-                    movie.description = movieDetails?.description ?: ""
+                    movie.description = movieDetails?.description ?: "Unfortunately, this movie has no description"
 
                     // Recursively fetch details for the next movie after a delay
                     handler.postDelayed({
@@ -184,8 +148,8 @@ fun getDummyMovies(): List<Movie> {
             year = index.toString(),
             nameEn = "",
             nameOriginal = "",
-            countries = emptyList<Country>(),
-            genres =  emptyList<Genre>(),
+            countries = listOf(Country("")),
+            genres =  listOf(Genre("")),
             ratingKinopoisk= 8.8,
             ratingImbd = 8.9,
             type ="String",

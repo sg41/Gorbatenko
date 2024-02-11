@@ -49,7 +49,6 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
             val movie = movies[position]
-            // Загружаем изображение с использованием Glide (или другой библиотеки для загрузки изображений)
             Glide.with(holder.itemView)
                 .load(movie.movie.posterUrlPreview)
                 .placeholder(R.drawable.ic_launcher_background)

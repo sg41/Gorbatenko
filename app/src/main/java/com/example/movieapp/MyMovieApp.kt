@@ -18,10 +18,7 @@ class MyMovieApp : Application() {
         }
     }
     private fun handleUncaughtException(throwable: Throwable) {
-        // Display a dialog with the exception information
         showExceptionDialog(throwable)
-
-        // Log the exception for further analysis
         Log.e("UncaughtException", "Exception: ${throwable.message}", throwable)
     }
 

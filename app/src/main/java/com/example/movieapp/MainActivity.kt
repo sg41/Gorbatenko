@@ -144,7 +144,7 @@ fun getDummyMovies(): List<Movie> {
             MovieNoDescription(
             kinopoiskId = index,
             nameRu = "Movie $index",
-            posterUrl = "https://example.com/poster_$index.jpg",
+            posterUrl = "",
             year = index.toString(),
             nameEn = "",
             nameOriginal = "",

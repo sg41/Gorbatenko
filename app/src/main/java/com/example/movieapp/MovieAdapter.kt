@@ -1,6 +1,8 @@
 package com.example.movieapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val posterImageView: ImageView = itemView.findViewById(R.id.moviePosterImageView)
     val titleTextView: TextView = itemView.findViewById(R.id.movieTitleTextView)
     val yearTextView: TextView = itemView.findViewById(R.id.movieYearTextView)
+    val descriptionTextView: TextView = itemView.findViewById(R.id.movieDescription)
     private lateinit var currentMovie: Movie
     init {
         // Set an onClickListener for the whole item view
@@ -39,8 +42,10 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         currentMovie = movie
     }
 }
-    class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<MovieViewHolder>() {
+    class MovieAdapter(private var movies: List<Movie>,private val context: Context) : RecyclerView.Adapter<MovieViewHolder>() {
         lateinit var movieVieHolder: MovieViewHolder
+        private var moviesLoadedFlag = false
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
 
@@ -57,6 +62,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             holder.titleTextView.text = movie.movie.nameRu
             holder.yearTextView.text = movie.movie.year
+            holder.descriptionTextView.text = movie.description
             holder.bind(movie)
         }
         override fun getItemCount(): Int {
@@ -65,9 +71,12 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun updateMovies(newMovies: List<Movie>) {
             movies = newMovies
+            moviesLoadedFlag = true
             notifyDataSetChanged()
         }
-
+        fun moviesLoaded():Boolean{
+            return moviesLoadedFlag
+        }
     }
 
 

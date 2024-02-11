@@ -1,6 +1,7 @@
 package com.example.movieapp
 
 import android.app.AlertDialog
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -18,10 +19,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+         setContentView(R.layout.activity_main)
+
         // Initialize RecyclerView and MovieAdapter
         recyclerView = findViewById(R.id.MovieList)
-        movieAdapter = MovieAdapter(getDummyMovies())
+        movieAdapter = MovieAdapter(getDummyMovies(), this)
 
         // Set up the RecyclerView with the adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun getPopularMovies() {
+        if(movieAdapter.moviesLoaded())
+            return
         val call = RetrofitClient.kinopoiskApiService.getPopularMovies("TOP_POPULAR_MOVIES")
         call.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
@@ -124,7 +128,6 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Error")
             .setMessage(message)
             .setPositiveButton("OK") { _, _ ->
-                // Handle button press if needed
             }
             .setCancelable(false)
             .create()
@@ -138,7 +141,6 @@ class MainActivity : AppCompatActivity() {
 }
 fun getDummyMovies(): List<Movie> {
 
-    // Возвращаем заглушку для примера
     return List(10) { index ->
         Movie(
             MovieNoDescription(

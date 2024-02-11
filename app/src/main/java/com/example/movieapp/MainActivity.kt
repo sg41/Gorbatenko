@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.RetrofitClient
@@ -17,25 +18,35 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var movieViewModel: MovieViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          setContentView(R.layout.activity_main)
 
-        // Initialize RecyclerView and MovieAdapter
+        movieViewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
+        // Check if movies are already stored in ViewModel
+        if (movieViewModel.movies == null) {
+            // If not, fetch movies and set them in ViewModel
+          // Initialize RecyclerView and MovieAdapter
         recyclerView = findViewById(R.id.MovieList)
         movieAdapter = MovieAdapter(getDummyMovies(), this)
-
-        // Set up the RecyclerView with the adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = movieAdapter
 
-        // Fetch popular movies and update RecyclerView
-        try {
-            getPopularMovies()
-        } catch (e: Exception) {
-            // Handle other exceptions (e.g., JSON parsing, network issues, etc.)
-            val errorMessage = "Unexpected error: ${e.message}"
-            showError(errorMessage)
+            // Fetch popular movies and update RecyclerView
+            try {
+                getPopularMovies()
+            } catch (e: Exception) {
+                // Handle other exceptions (e.g., JSON parsing, network issues, etc.)
+                val errorMessage = "Unexpected error: ${e.message}"
+                showError(errorMessage)
+            }
+        } else {
+            // If movies are already in ViewModel, update RecyclerView
+            recyclerView = findViewById(R.id.MovieList)
+            movieAdapter = MovieAdapter(movieViewModel.movies!!, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = movieAdapter
         }
     }
     private fun getPopularMovies() {
@@ -53,8 +64,10 @@ class MainActivity : AppCompatActivity() {
                                 description = "Description is to be loaded, please come back in 20 seconds..."
                                 )
                         }
+                        movieViewModel.movies = movies
                         movieAdapter.updateMovies(movies)
                         fetchMovieDetailsForList(movies) { updatedMovies ->
+                            movieViewModel.movies = updatedMovies
                             movieAdapter.updateMovies(updatedMovies)
                         }
                     } ?: showError("Movie response is null")

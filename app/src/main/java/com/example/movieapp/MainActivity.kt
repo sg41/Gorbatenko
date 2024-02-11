@@ -57,7 +57,40 @@ class MainActivity : AppCompatActivity() {
                 showError(errorMessage)
             }
         })
+
     }
+    private fun getMovieDetails(movieId: Int) {
+        val call = RetrofitClient.kinopoiskApiService.getMovieDetails(movieId)
+        call.enqueue(object : Callback<MovieDetails> {
+            override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
+                if (response.isSuccessful) {
+                    val movieDetails = response.body()
+                    movieDetails?.let {
+                        // Handle the detailed movie information, update UI, etc.
+                        // For example, you can display information in a new activity or fragment.
+                        // You can also store this detailed information in a ViewModel or any other data structure.
+
+                        // Example:
+                        // val intent = Intent(this@MainActivity, MovieDetailsActivity::class.java)
+                        // intent.putExtra("movieDetails", movieDetails)
+                        // startActivity(intent)
+
+                    } ?: showError("Movie details response is null")
+                } else {
+                    // Handle unsuccessful response
+                    val errorMessage = "Error: ${response.code()} ${response.message()}"
+                    showError(errorMessage)
+                }
+            }
+
+            override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
+                // Handle network errors
+                val errorMessage = "Network error: ${t.message}"
+                showError(errorMessage)
+            }
+        })
+    }
+
 
     private fun showError(message: String) {
 //        showToast(message)

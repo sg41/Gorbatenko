@@ -25,9 +25,9 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             // Загружаем изображение с использованием Glide (или другой библиотеки для загрузки изображений)
             Glide.with(holder.itemView)
-                .load(movie.posterUrl)
+                .load(movie.posterUrlPreview)
                 .placeholder(R.drawable.ic_launcher_background)
-                .error(movie.posterUrlPreview)
+                .error(R.drawable.avatar_1)
                 .into(holder.posterImageView)
 
             holder.titleTextView.text = movie.nameRu

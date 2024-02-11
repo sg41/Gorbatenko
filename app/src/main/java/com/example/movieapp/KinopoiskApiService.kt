@@ -1,4 +1,5 @@
 package com.example.movies
+import com.example.movieapp.MovieDetails
 import com.example.movieapp.MovieResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -11,5 +12,5 @@ interface KinopoiskApiService {
     fun getPopularMovies(@Query("type") type: String): Call<MovieResponse>
 
     @GET("/api/v2.2/films")
-    fun getMovieDetails(@Path("id") type: String): Call<MovieResponse>
+    fun getMovieDetails(@Path("id") type: Int): Call<MovieDetails>
 }

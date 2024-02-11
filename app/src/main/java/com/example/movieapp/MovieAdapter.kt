@@ -13,14 +13,14 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val posterImageView: ImageView = itemView.findViewById(R.id.moviePosterImageView)
     val titleTextView: TextView = itemView.findViewById(R.id.movieTitleTextView)
     val yearTextView: TextView = itemView.findViewById(R.id.movieYearTextView)
-    lateinit var movies: List<Movie>
+    lateinit var currentMovie: Movie
     init {
         // Set an onClickListener for the whole item view
         itemView.setOnClickListener {
             // Check if the adapter position is valid
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 // Get the clicked movie from the list
-                val clickedMovie = movies[adapterPosition]
+                val clickedMovie = currentMovie
 
                 // Create an Intent to start the MovieDetailsActivity
                 val intent = Intent(itemView.context, MovieDetailActivity::class.java)
@@ -35,19 +35,25 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
     }
+    fun bind(movie: Movie) {
+        // Update the views in the view holder with the data from the movie
+        // For example, set text to TextView, load image to ImageView, etc.
+//        itemView.findViewById<TextView>(R.id.movieTitleTextView).text = movie.nameRu
+        // Update other views...
+        currentMovie = movie
+        // You can also set click listeners or perform other actions here if needed.
+    }
 }
     class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<MovieViewHolder>() {
         lateinit var movieVieHolder: MovieViewHolder
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-            movieVieHolder = MovieViewHolder(view)
-            movieVieHolder.movies = movies
-            return movieVieHolder
+
+            return MovieViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
             val movie = movies[position]
-            movieVieHolder.movies = movies
             // Загружаем изображение с использованием Glide (или другой библиотеки для загрузки изображений)
             Glide.with(holder.itemView)
                 .load(movie.posterUrlPreview)
@@ -57,6 +63,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             holder.titleTextView.text = movie.nameRu
             holder.yearTextView.text = movie.year
+            holder.bind(movie)
         }
         override fun getItemCount(): Int {
             return movies.size
@@ -64,7 +71,6 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun updateMovies(newMovies: List<Movie>) {
             movies = newMovies
-            movieVieHolder.movies = movies
             notifyDataSetChanged()
         }
 

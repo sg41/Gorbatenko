@@ -26,7 +26,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = movieAdapter
 
         // Fetch popular movies and update RecyclerView
-        getPopularMovies()
+        try {
+            getPopularMovies()
+        } catch (e: Exception) {
+            // Handle other exceptions (e.g., JSON parsing, network issues, etc.)
+            val errorMessage = "Unexpected error: ${e.message}"
+            showError(errorMessage)
+        }
     }
     private fun getPopularMovies() {
         val call = RetrofitClient.kinopoiskApiService.getPopularMovies("TOP_POPULAR_MOVIES")

@@ -11,6 +11,6 @@ interface KinopoiskApiService {
     @GET("/api/v2.2/films/collections")
     fun getPopularMovies(@Query("type") type: String): Call<MovieResponse>
 
-    @GET("/api/v2.2/films")
+    @GET("/api/v2.2/films/{id}")
     fun getMovieDetails(@Path("id") type: Int): Call<MovieDetails>
 }

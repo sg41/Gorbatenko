@@ -16,7 +16,6 @@ class MovieDetailActivity : AppCompatActivity() {
         val movieCountry = intent.getStringExtra("country")
 
         // Загрузка данных на экран
-        // Здесь вы можете использовать библиотеку Glide для загрузки изображений
         Glide.with(this).load(moviePosterUrl).into(findViewById(R.id.imageViewPoster))
 
         findViewById<TextView>(R.id.textViewDescription).text = movieDescription

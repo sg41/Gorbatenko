@@ -41,8 +41,20 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val movieResponse = response.body()
                     movieResponse?.let {
-                        val movies = it.items
+                        val movies = it.items.map { movieNoDescription ->
+                            Movie(
+                                movie = movieNoDescription,
+                                description = "" // provide a default or empty description
+                                )
+                        }
                         movieAdapter.updateMovies(movies)
+                        fetchMovieDetailsForList(movies) { updatedMovies ->
+                            // Handle the updated list of movies with details
+                            // For example, update your RecyclerView adapter with the new data
+                            // movieAdapter.updateMovies(updatedMovies)
+                            // ...
+                            movieAdapter.updateMovies(updatedMovies)
+                        }
                     } ?: showError("Movie response is null")
                 } else {
                     // Handle unsuccessful response
@@ -59,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+    /*
     private fun getMovieDetails(movieId: Int) {
         val call = RetrofitClient.kinopoiskApiService.getMovieDetails(movieId)
         call.enqueue(object : Callback<MovieDetails> {
@@ -90,7 +103,51 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+*/
+    private fun fetchMovieDetailsForList(movies: List<Movie>, onDetailsFetched: (List<Movie>) -> Unit) {
+        val iterator = movies.iterator()
 
+        fun fetchNextMovieDetails() {
+            if (iterator.hasNext()) {
+                var movie = iterator.next()
+                val movieId = movie.movie.kinopoiskId
+
+                getMovieDetails(movieId) { movieDetails ->
+                    // Update your Movie object with the details if needed
+                    movie.description = movieDetails?.description ?: ""
+
+                    // Recursively fetch details for the next movie
+                    fetchNextMovieDetails()
+                }
+            } else {
+                // All details fetched, invoke the callback with the updated list
+                onDetailsFetched(movies)
+            }
+        }
+
+        // Start fetching details for the first movie
+        fetchNextMovieDetails()
+    }
+
+    private fun getMovieDetails(movieId: Int, onDetailsFetched: (MovieDetails?) -> Unit) {
+        val call = RetrofitClient.kinopoiskApiService.getMovieDetails(movieId)
+        call.enqueue(object : Callback<MovieDetails> {
+            override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
+                if (response.isSuccessful) {
+                    val movieDetails = response.body()
+                    onDetailsFetched(movieDetails)
+                } else {
+                    // Handle unsuccessful response
+                    onDetailsFetched(null)
+                }
+            }
+
+            override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
+                // Handle network errors
+                onDetailsFetched(null)
+            }
+        })
+    }
 
     private fun showError(message: String) {
 //        showToast(message)
@@ -115,6 +172,7 @@ fun getDummyMovies(): List<Movie> {
     // Возвращаем заглушку для примера
     return List(10) { index ->
         Movie(
+            MovieNoDescription(
             kinopoiskId = index,
             nameRu = "Movie $index",
             posterUrl = "https://example.com/poster_$index.jpg",
@@ -127,6 +185,8 @@ fun getDummyMovies(): List<Movie> {
             ratingImbd = 8.9,
             type ="String",
             posterUrlPreview = "localhost"
+            ),
+            description = ""
         )
     }
 }

@@ -2,10 +2,10 @@ package com.example.movieapp
 data class MovieResponse(
     val total: Int,
     val totalPages: Int,
-    val items: List<Movie>
+    val items: List<MovieNoDescription>
 )
 
-data class Movie(
+data class MovieNoDescription(
     val kinopoiskId: Int,
     val nameRu: String,
     val nameEn: String,
@@ -17,7 +17,12 @@ data class Movie(
     val year: String,
     val type: String,
     val posterUrl: String,
-    val posterUrlPreview: String
+    val posterUrlPreview: String,
+)
+
+data class Movie(
+    val movie: MovieNoDescription,
+    var description: String
 )
 
 data class Country(

@@ -25,9 +25,9 @@
    ```bash
    git clone https://github.com/sg41/Gorbatenko.git
 
-2. **Настройка Retrofit и API ключа:**
+2. **Настройка Retrofit и API ключа (необязательно):**
    - Откройте файл `RetrofitClient.kt` в пакете `com.example.movies`.
-   - Замените строку `const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"` на ваш собственный API ключ (необязательно).
+   - Замените строку `const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"` на ваш собственный API ключ.
 
 3. **Подключение библиотек (необходимо):**
    - Убедитесь, что ваши зависимости, такие как Retrofit и Glide , правильно подключены. Вы можете управлять зависимостями в файле `app/build.gradle`.

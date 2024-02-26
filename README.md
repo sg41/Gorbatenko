@@ -26,7 +26,7 @@
 1. **Клонирование репозитория:** Склонируйте репозиторий с проектом на свой компьютер.
    
    ```bash
-   git clone https://github.com/sg41/Gorbatenko.git
+   git clone https://github.com/sg41/MovieApp.git
 
 2. **Настройка Retrofit и API ключа (необязательно):**
    - Откройте файл `RetrofitClient.kt` в пакете `com.example.movies`.
